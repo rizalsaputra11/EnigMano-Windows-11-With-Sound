@@ -15,8 +15,10 @@ jobs:
 
     env:
       INSTANCE_ID: ${{ github.event.inputs.INSTANCE }}
-      SECRET_SHAHZAIB: ${{ secrets.SECRET_SHAHZAIB }}
-      NGROK_SHAHZAIB: ${{ secrets.NGROK_SHAHZAIB }}
+      PLAYIT_AUTH_KEY: ${{ secrets.PL }}
+      run: | 
+      Start-Process -FilePath "$env:USERPROFILE\playit.exe" -ArgumentList "--secret $env:PLAYIT_AUTH_KEY" -NoNewWindow -Wait
+      Start-Process -FilePath "$env:USERPROFILE\playit.exe" -NoNewWindow
       REPO: ${{ github.repository }}
       WORKFLOW_FILE: "enigmano-Win-11.yml"
       DEPLOYMENT_ID: ${{ github.run_id }}
@@ -34,15 +36,15 @@ jobs:
           Write-Host "🆔 Deployment ID         : $env:DEPLOYMENT_ID"
           Write-Host "==============================================="
 
-      - name: 🔐 Validate Secrets
+      - name: 🔐 Validate Key
         shell: pwsh
         run: |
-          if (-not $env:SECRET_SHAHZAIB) {
-            Write-Error "❌ Missing GitHub Secret: SECRET_SHAHZAIB"
+          if (-not $env:PLAYIT_AUTH_KEY) {
+            Write-Error "❌ Missing GitHub Key: PLAYIT_AUTH_KEY"
             exit 1
           }
-          if (-not $env:NGROK_SHAHZAIB) {
-            Write-Error "❌ Missing Ngrok Auth Token: NGROK_SHAHZAIB"
+          if (-not $env:PLAYIT_AUTH_KEY) {
+            Write-Error "❌ Missing Auth Key: PLAYIT_AUTH_KEY"
             exit 1
           }
           Write-Host "✅ All required secrets validated successfully"
